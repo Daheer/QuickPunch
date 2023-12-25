@@ -1,8 +1,6 @@
 from typing import List, Dict, Any
 import yaml
 from pathlib import Path
-from ensure import ensure_annotations
-from box import ConfigBox
 import os
 from supabase import create_client, Client
 import dotenv
@@ -38,12 +36,13 @@ def get_supabase():
   Get the database connection.
   """
   dotenv.load_dotenv()
-  supabase_url = os.getenv("SUPABASE_URL")
-  supabase_key = os.getenv("SUPABASE_KEY")
-  logger.info(f"{bin_colors.INFO}Connecting to database at {supabase_url}.{bin_colors.ENDC}")
-  supabase = create_client(supabase_url, supabase_key)
+  SUPABASE_URL = os.getenv("SUPABASE_URL")
+  SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+  print(SUPABASE_URL, SUPABASE_KEY)
+  logger.info(f"{bin_colors.INFO}Connecting to database at {SUPABASE_URL}.{bin_colors.ENDC}")
+  supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
   if supabase is None:
-    logger.error(f"{bin_colors.ERROR}Error connecting to database at {supabase_url}.{bin_colors.ENDC}")
+    logger.error(f"{bin_colors.ERROR}Error connecting to database at {SUPABASE_URL}.{bin_colors.ENDC}")
     raise Exception("Error connecting to database.")
-  logger.info(f"{bin_colors.SUCCESS}Connected to database at {supabase_url}.{bin_colors.ENDC}")
+  logger.info(f"{bin_colors.SUCCESS}Connected to database at {SUPABASE_URL}.{bin_colors.ENDC}")
   return supabase
