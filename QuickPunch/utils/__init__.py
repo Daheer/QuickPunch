@@ -9,6 +9,9 @@ import requests
 from box.exceptions import BoxValueError
 from ensure import ensure_annotations
 from box import ConfigBox
+import ssl
+import smtplib
+from email.message import EmailMessage
 
 
 @ensure_annotations
@@ -82,3 +85,96 @@ def read_article(link: str) -> str:
     article.append(p.text)
 
   return "".join(article)
+
+# def send_email(email: str, message: str) -> None:
+#   """
+#   Send an email to a user.
+#   """
+#   dotenv.load_dotenv()
+
+#   email_sender = "quick.punch.daily@gmail.com"
+#   email_password = os.getenv("APP_PASSWORD")
+  
+#   email_receiver = email	
+#   subject = "Your daily digest from QuickPunch"
+#   body = message
+
+#   em =  EmailMessage()
+#   em["From"] = email_sender
+#   em["To"] = email_receiver
+#   em["Subject"] = subject
+#   em.set_content(body)
+
+#   context = ssl.create_default_context()
+
+#   with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+#     server.login(email_sender, email_password)
+#     server.sendmail(email_sender, email_receiver, em.as_string())
+
+def send_email(email: str, message: str) -> None:
+    """
+    Send an email to a user.
+    """
+    dotenv.load_dotenv()
+
+    email_sender = "quick.punch.daily@gmail.com"
+    email_password = os.getenv("APP_PASSWORD")
+
+    email_receiver = email
+    subject = "Your daily digest from QuickPunch"
+
+    # Use HTML formatting with inline CSS for the border
+    body = f"""
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <style>
+                    .email-body {{
+                      font-family: Arial;
+                      font-size: 14px;
+                    }}
+                    .article {{
+                      border: 1px solid black;
+                      padding: 10px;
+                      border-radius: 5px;
+                      margin-bottom: 10px;
+                      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+                    }}
+                    .greeting {{
+                      display: flex;
+                      align-items: center;
+                      justify-content: center;
+                      border-radius: 3px;
+                      border: 1px solid black;
+                      padding: 5px;
+                    }}
+                    .hero {{
+                      height: 100px;
+                      width: 100%;
+                      border-radius: 5px;
+                      background: rgba(255, 255, 255, 0.8);
+                      background: url('https://64.media.tumblr.com/91d00b07096a6b02b2b240ac4f436707/debc7e0e3a58a66d-54/s250x400/fe81635fe446e3c2b87ab319eabe205f5fcc92af.jpg');
+                      background-position: center;
+                      background-size: contain;
+                    }}
+                </style>
+            </head>
+            <body>
+                <div class="email-body">
+                    {message}
+                </div>
+            </body>
+        </html>
+    """
+
+    em = EmailMessage()
+    em["From"] = email_sender
+    em["To"] = email_receiver
+    em["Subject"] = subject
+    em.set_content(body, subtype='html')
+
+    context = ssl.create_default_context()
+
+    with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
+        server.login(email_sender, email_password)
+        server.sendmail(email_sender, email_receiver, em.as_string())
