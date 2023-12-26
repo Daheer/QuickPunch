@@ -1,5 +1,15 @@
 artifacts_root: artifacts
 
+summarization:
+  model_path: facebook/bart-large-cnn
+  max_length: 130
+  min_length: 30
+  do_sample: 0
+
+categorization:
+  threshold: 0.5
+  model_path: kartashoffv/news_topic_classification
+
 data_ingestion:
   root_dir: artifacts/data_ingestion
   source_URL: 

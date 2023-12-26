@@ -4,6 +4,29 @@ from pathlib import Path
 import os
 from supabase import create_client, Client
 import dotenv
+from bs4 import BeautifulSoup
+import requests
+from box.exceptions import BoxValueError
+from ensure import ensure_annotations
+from box import ConfigBox
+
+
+@ensure_annotations
+def read_yaml(path_to_yaml: Path) -> ConfigBox:
+  """
+  Read a yaml file and return a ConfigBox object.
+  """
+  try:
+    with open(path_to_yaml, "r") as yaml_file:
+      yaml_dict = yaml.safe_load(yaml_file)
+      logger.info(f"yaml file: {yaml_file.name} read successfully.")
+      return ConfigBox(yaml_dict)
+  except BoxValueError:
+    raise ValueError(f"Error reading yaml file at {path_to_yaml}.")
+    logger.error(f"Error reading yaml file at {path_to_yaml}.")
+  except Exception as e:
+    raise e
+    logger.error(f"Error reading yaml file at {path_to_yaml}.")
 
 from QuickPunch.logging import logger
 
@@ -38,7 +61,6 @@ def get_supabase():
   dotenv.load_dotenv()
   SUPABASE_URL = os.getenv("SUPABASE_URL")
   SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-  print(SUPABASE_URL, SUPABASE_KEY)
   logger.info(f"{bin_colors.INFO}Connecting to database at {SUPABASE_URL}.{bin_colors.ENDC}")
   supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
   if supabase is None:
@@ -46,3 +68,17 @@ def get_supabase():
     raise Exception("Error connecting to database.")
   logger.info(f"{bin_colors.SUCCESS}Connected to database at {SUPABASE_URL}.{bin_colors.ENDC}")
   return supabase
+
+
+def read_article(link: str) -> str:
+  """
+  Read the article from the link.
+  """
+  response = requests.get(link)
+  soup = BeautifulSoup(response.content, 'html.parser')
+  article = []
+  post_content = soup.find('div', class_='post-content')
+  for p in post_content.find_all('p'):
+    article.append(p.text)
+
+  return "".join(article)
