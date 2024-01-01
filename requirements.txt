@@ -2,5 +2,8 @@ feedparser==6.0.11
 python-box==6.0.2
 ensure==1.0.2
 transformers==4.36.2
+supabase==2.3.0
+python-dotenv==1.0.0
+bs4==0.0.1
 
 -e .
