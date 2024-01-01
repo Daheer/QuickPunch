@@ -35,7 +35,7 @@ class Distribution:
     articles = [
       f"{self.icons[category]} <div class='article'>{summary}\n\nLink: {link}</div>" for summary, link in zip([entry["summary"] for entry in result], [entry["link"] for entry in result])
     ]
-    return "".join(articles)
+    return "".join(articles), len(articles)
 
   def get_emails_(self, category: str) -> Any:
     result = self.supabase.table(category).select("*").execute().data
@@ -59,10 +59,18 @@ class Distribution:
     categories = self.preference_dict[email]
     message = f"<div class='hero'></div><div class='greeting'>Here are your top articles for <b>{datetime.now().strftime('%A, %d %B, %Y')}</b>\n</div>"
     for category in categories:
-      articles = self.get_articles(category)
+      articles, n_articles = self.get_articles(category)
+      self.update_n_reads(email, n_articles, category)
       message += f"<div class='section'>{articles}</div>" if articles else ""
     message += "Thank you for subscribing to QuickPunch."
     return message.replace("\n", "<br>")
+
+  def update_n_reads(self, email: str, n_reads, category) -> None:
+    total_reads = self.supabase.table(category).select("n_reads").eq("email", email).execute().data[0]["n_reads"]
+    if total_reads is None:
+      total_reads = 0
+    total_reads += n_reads
+    self.supabase.table(category).update({"n_reads": total_reads}).eq("email", email).execute()
 
   def send_email_to(self, email: str) -> None:
     message = self.prepare_message_for(email)
