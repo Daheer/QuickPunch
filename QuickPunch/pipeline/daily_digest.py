@@ -1,4 +1,5 @@
-from QuickPunch.utils.logger import logger, bin_colors
+from QuickPunch.logging import logger
+from QuickPunch.utils import bin_colors
 from QuickPunch.components.initialization import Initialization
 from QuickPunch.components.summarization import Summarization
 from QuickPunch.components.categorization import Categorization
