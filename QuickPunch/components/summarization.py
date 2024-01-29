@@ -17,6 +17,10 @@ class Summarization:
     return summary[0]['summary_text']
 
   def summarize_articles(self):
+    """
+    The `summarize_articles` function retrieves articles from a database, summarizes them using a
+    pre-trained model, and updates the database with the summaries.
+    """
     self.summarizer = pipeline("summarization", model=self.config.model_path)
     logger.info(f"{bin_colors.INFO}Getting articles to summarize.{bin_colors.ENDC}")
     response = self.supabase.table("entries").select("*").execute()

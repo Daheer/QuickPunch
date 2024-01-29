@@ -86,31 +86,6 @@ def read_article(link: str) -> str:
 
   return "".join(article)
 
-# def send_email(email: str, message: str) -> None:
-#   """
-#   Send an email to a user.
-#   """
-#   dotenv.load_dotenv()
-
-#   email_sender = "quick.punch.daily@gmail.com"
-#   email_password = os.getenv("APP_PASSWORD")
-  
-#   email_receiver = email	
-#   subject = "Your daily digest from QuickPunch"
-#   body = message
-
-#   em =  EmailMessage()
-#   em["From"] = email_sender
-#   em["To"] = email_receiver
-#   em["Subject"] = subject
-#   em.set_content(body)
-
-#   context = ssl.create_default_context()
-
-#   with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-#     server.login(email_sender, email_password)
-#     server.sendmail(email_sender, email_receiver, em.as_string())
-
 def send_email(email: str, message: str) -> None:
     """
     Send an email to a user.
