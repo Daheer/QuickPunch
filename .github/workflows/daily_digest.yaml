@@ -1,8 +1,8 @@
 name: Daily Digest @ 8AM UTC | 9AM WAT
 
-on: 
-  schedule:
-    - cron: '11,12 22,21,23 * * *'
+on: push
+  # schedule:
+    # - cron: '11,12 22,21,23 * * *'
     
 jobs:
   daily_digest:
