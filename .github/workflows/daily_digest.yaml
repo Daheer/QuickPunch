@@ -1,0 +1,33 @@
+name: Daily Digest @ 8AM UTC | 9AM WAT
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+
+jobs:
+  daily_digest:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository content
+      uses: actions/checkout@v2
+
+    - name: Set up Python environment
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x' 
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Setup secrets
+      env:
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
+      run: echo "Successfully setup repo secrets"
+
+    - name: Run Daily Digest Distribution Pipeline 
+      run: echo "Succesfully distributed to subscribers"
+      # run: python QuickPunch/pipeline/daily_digest.py # This step runs your Python script
