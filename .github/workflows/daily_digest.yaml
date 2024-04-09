@@ -2,7 +2,7 @@ name: Daily Digest @ 8AM UTC | 9AM WAT
 
 on: 
   schedule:
-    - cron: '28 11 * * *'
+    - cron: '0 8 * * *'
     
 jobs:
   daily_digest:
@@ -29,5 +29,6 @@ jobs:
       run: echo "Successfully setup repo secrets"
 
     - name: Run Daily Digest Distribution Pipeline 
-      run: echo "Succesfully distributed to subscribers"
-      # run: python QuickPunch/pipeline/daily_digest.py # This step runs your Python script
+      run: | 
+        python QuickPunch/pipeline/daily_digest.py 
+        echo "Succesfully distributed to subscribers"
