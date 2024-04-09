@@ -2,7 +2,7 @@ name: Daily Digest @ 8AM UTC | 9AM WAT
 
 on: 
   schedule:
-    - cron: '31 22,21,23 * * *'
+    - cron: '28 11 * * *'
     
 jobs:
   daily_digest:
