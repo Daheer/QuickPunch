@@ -26,7 +26,13 @@ jobs:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
         APP_PASSWORD: ${{ secrets.APP_PASSWORD }}
-      run: echo "Successfully setup repo secrets"
+      run: |
+        import os
+        import dotenv
+        dotenv.load_dotenv()
+        print(os.getenv("SUPABASE_URL"))
+        print(os.getenv("SUPABASE_KEY"))
+        echo "Successfully setup repo secrets"
 
     - name: Run Daily Digest Distribution Pipeline 
       run: | 
