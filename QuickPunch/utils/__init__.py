@@ -7,14 +7,14 @@ import dotenv
 from bs4 import BeautifulSoup
 import requests
 from box.exceptions import BoxValueError
-from ensure import ensure_annotations
+# from ensure import ensure_annotations
 from box import ConfigBox
 import ssl
 import smtplib
 from email.message import EmailMessage
 
 
-@ensure_annotations
+# @ensure_annotations
 def read_yaml(path_to_yaml: Path) -> ConfigBox:
   """
   Read a yaml file and return a ConfigBox object.
