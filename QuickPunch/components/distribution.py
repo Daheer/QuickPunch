@@ -89,12 +89,16 @@ class Distribution:
     """
     categories = self.preference_dict[email]
     message = f"<div class='hero'></div><div class='greeting'>Here are your top articles for <b>{datetime.now().strftime('%A, %d %B, %Y')}</b>\n</div>"
+    total_n_articles: int = 0
+    send: bool = False
     for category in categories:
       articles, n_articles = self.get_articles(category)
       self.update_n_reads(email, n_articles, category)
       message += f"<div class='section'>{articles}</div>" if articles else ""
+      total_n_articles += n_articles
     message += "Thank you for subscribing to QuickPunch."
-    return message.replace("\n", "<br>")
+    if total_n_articles != 0: send = True
+    return message.replace("\n", "<br>"), send
 
   # The `update_n_reads` method is responsible for updating the number of reads for a specific
   # category and email address in the Supabase table.
@@ -106,10 +110,13 @@ class Distribution:
     self.supabase.table(category).update({"n_reads": total_reads}).eq("email", email).execute()
 
   def send_email_to(self, email: str) -> None:
-    message = self.prepare_message_for(email)
-    logger.info(f"{bin_colors.INFO}Sending email to {email}...{bin_colors.ENDC}")
-    send_email(email, message)
-    logger.info(f"{bin_colors.SUCCESS}Email sent to {email}.{bin_colors.ENDC}")
+    message, send = self.prepare_message_for(email)
+    if send:
+      logger.info(f"{bin_colors.INFO}Sending email to {email}...{bin_colors.ENDC}")
+      send_email(email, message)
+      logger.info(f"{bin_colors.SUCCESS}Email sent to {email}.{bin_colors.ENDC}")
+    else:
+      logger.info(f"{bin_colors.INFO}No articles for {email}...{bin_colors.ENDC}")
   
   def send_emails(self) -> None:
     for email in self.emails:
