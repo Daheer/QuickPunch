@@ -6,7 +6,7 @@ Get summaries of your daily Nigerian news in Deedax style!
 ## Introduction
 QuickPunch is a simple news aggreagator that uses the PunchNG to summarize Nigerian news. Subscribers can choose to receive daily summaries of the top headlines in Nigerian news based on their interests.
 
-For the front-end, check [here](https://github.com/Daheer/QuickPunch_FrontEnd)
+For the front-end, check [here](https://github.com/Daheer/QuickPunch_Front_End)
 
 ## Demo
 Live hosted version of QuickPunch can be found [here](https://quick-punch.vercel.app/)
